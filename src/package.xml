@@ -1,8 +1,10 @@
+<?xml version="1.0"?>
 <package format="3">
   <name>calibration_transformation_broker</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>ROS2 node to read and extract transformations from a log file and broadcast them as tf2 transformations</description>
-  <maintainer email="deine.email@example.com">Dein Name</maintainer>
+
+  <maintainer email="t.rehbronn@irt.rwth-aachen.de">Tim Rehbronn</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_python</buildtool_depend>

@@ -1,0 +1,7 @@
+remappings:
+  - input_topic: /rslidar_points
+    output_topic: /lidar_left_front
+    new_frame_id: lidar_left_front_frame
+  - input_topic: /rslidar_points_2
+    output_topic: /lidar_left_back
+    new_frame_id: lidar_left_back_frame
