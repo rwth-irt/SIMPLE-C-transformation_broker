@@ -1,3 +1,4 @@
+import yaml
 import rclpy
 from rclpy.node import Node
 import os
@@ -6,26 +7,20 @@ from geometry_msgs.msg import TransformStamped
 from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
 import tf2_ros
 
+
 class CalibrationTransformationBroker(Node):
     def __init__(self):
         super().__init__('calibration_transformation_broker')
-        self.declare_parameter('transformation_file_path', '')
-        transformation_file_path = self.get_parameter('transformation_file_path').get_parameter_value().string_value
+        self.declare_parameter('config_file', 'src/config/config_transformation_broker.yaml')  # Relative to the installed share directory
+        config_file = self.get_parameter('config_file').get_parameter_value().string_value
         
-        self.declare_parameter('parent_frame', 'lidar_imu')
-        self.parent_frame_id = self.get_parameter('parent_frame').get_parameter_value().string_value
+        # Load the configuration from the YAML file
+        with open(config_file, 'r') as f:
+            self.config = yaml.safe_load(f)
 
-        self.declare_parameter('child_frame', 'lidar_left_front')
-        self.child_frame_id = self.get_parameter('child_frame').get_parameter_value().string_value
-
-
-        if not os.path.isfile(transformation_file_path):
-            self.get_logger().error(f"File {transformation_file_path} does not exist")
-            return
-        
         self.tf_static_broadcaster = StaticTransformBroadcaster(self)
         
-        self.read_last_transformation(transformation_file_path)
+        self.generate_transformations_from_config(self.config["Transformations"])
     
     def read_last_transformation(self, file_path):
         with open(file_path, 'r') as file:
@@ -108,6 +103,11 @@ class CalibrationTransformationBroker(Node):
         except ImportError:
             pass
 
+
+def generate_transformations_from_config(config):
+    """ TBD """
+
+    return
 
 def main(args=None):
     rclpy.init(args=args)

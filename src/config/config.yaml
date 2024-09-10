@@ -1,3 +1,20 @@
+Transformations:
+  - frame_chain: lidar_left_back_frame, lidar_top_frame
+    invert_chain: 1, 1, -1, 1
+    path_chain:  /media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/left_back_to_front.log,/media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/left_front_to_front.log,/media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_front.log,/media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_top.log
+  - frame_chain: lidar_left_front_frame, lidar_top_frame
+    invert_chain: 1, -1, 1
+    path_chain:  /media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/left_front_to_front.log,/media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_front.log,/media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_top.log
+  - frame_chain: lidar_front_frame, lidar_top_frame
+    invert_chain: -1, 1
+    path_chain:  /media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_front.log,/media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_top.log
+  - frame_chain: lidar_right_back_frame, lidar_top_frame
+    invert_chain: 1, 1
+    path_chain:  /media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_back_to_front.log,/media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_top.log
+  - frame_chain: lidar_right_front_frame, lidar_top_frame
+    invert_chain: 1
+    path_chain:  /media/timrehbronn/DAS1/G-Nav/Deneb/transformations_normal/right_front_to_top.log
+
 remappings:
   - input_topic: /rslidar_points
     output_topic: /lidar_left_front
@@ -5,3 +22,16 @@ remappings:
   - input_topic: /rslidar_points_2
     output_topic: /lidar_left_back
     new_frame_id: lidar_left_back_frame
+  - input_topic: /rslidar_points_6
+    output_topic: /lidar_front
+    new_frame_id: lidar_front_frame
+  - input_topic: /rslidar_points_4
+    output_topic: /lidar_right_front
+    new_frame_id: lidar_right_front_frame
+  - input_topic: /rslidar_points_5
+    output_topic: /lidar_right_back
+    new_frame_id: lidar_right_back_frame
+  - input_topic: /rslidar_points_6
+    output_topic: /lidar_top
+    new_frame_id: lidar_top_frame
+

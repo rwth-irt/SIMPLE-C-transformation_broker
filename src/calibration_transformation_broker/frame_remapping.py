@@ -12,7 +12,7 @@ class FrameRemapper(Node):
         
 
         # Declare parameter for the configuration file path
-        self.declare_parameter('config_file', 'config/config.yaml')  # Relative to the installed share directory
+        self.declare_parameter('config_file', 'src/config/config.yaml')  # Relative to the installed share directory
         config_file = self.get_parameter('config_file').get_parameter_value().string_value
         
         # Load the configuration from the YAML file
