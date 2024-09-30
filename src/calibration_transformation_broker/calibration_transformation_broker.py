@@ -1,5 +1,6 @@
 import yaml
 import rclpy
+import json
 from rclpy.node import Node
 import numpy as np
 from scipy.spatial.transform import Rotation as R_
@@ -40,6 +41,42 @@ class CalibrationTransformationBroker(Node):
         
         # Generate the transformations from config file and publish
         self.generate_transformations_from_config(self.config["Transformations"])
+
+
+    def read_latest_transformation(self, json_file_path):
+        transformation_data = []
+        try:
+            with open(json_file_path, 'r') as file:
+                data = json.load(file)
+                
+                if "transformations" in data and len(data["transformations"]) > 0:
+                    for transformation in data["transformations"]:
+                    
+                        # Daten extrahieren
+                        transformation_data.append({
+                            "R": transformation.get("R"),
+                            "t": transformation.get("t"),
+                            "R_sensitivity": transformation.get("R_sensitivity"),
+                            "point_pairs_used": transformation.get("point_pairs_used"),
+                            "point_pairs_total": transformation.get("point_pairs_total"),
+                            "max_extent_P": transformation.get("max_extent_P"),
+                            "max_extent_Q": transformation.get("max_extent_Q"),
+                            "mean_distances": transformation.get("mean_distances"),
+                            "std_distances": transformation.get("std_distances")
+                        })
+                    
+                    return transformation_data
+                else:
+                    print("No transformations found in JSON.")
+                    return None
+                
+        except FileNotFoundError:
+            print(f"File {json_file_path} not found.")
+            return None
+        except json.JSONDecodeError:
+            print("Error while decoding JSON.")
+            return None
+
     
     def read_last_transformation(self, file_path, invert):
         """
@@ -295,7 +332,18 @@ class CalibrationTransformationBroker(Node):
                 file_path = path_chain[i]
                 invert = invert_chain[i]
 
-                R, t = self.read_last_transformation(file_path, invert)
+                transformation_data = self.read_latest_transformation(file_path)
+                latest_transformation = transformation_data[-1] 
+                R_ = np.asarray(latest_transformation["R"])
+                t_ = np.asarray(latest_transformation["t"])
+
+                if invert == -1:
+                    R = np.linalg.inv(R_)
+                    t = -np.dot(R, t_)
+                else:
+                    R = R_
+                    t = t_
+
                 if R is not None and t is not None:
                     # Combine the current transformation with the final transformation
                     final_t += np.dot(final_R, t)
